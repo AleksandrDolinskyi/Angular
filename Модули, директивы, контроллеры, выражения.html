@@ -1,0 +1,107 @@
+<!--
+    (1) - проверим, что angular запустился
+    (2) - выражения
+    (3) - модули
+    (4) - директивы
+-->
+<!DOCTYPE html>
+<html ng-app="playersApp"> <!-- (4) -->
+    <head>
+        <meta charset="utf-8">
+        <title>Модули, директивы, контроллеры, выражения</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <!-- (1)
+        проверка, что angular вступил в дело
+        <p>{{1+2}}</p>
+        -->
+        <div class="container" ng-controller="playerCtrl">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal">
+                        <legend>Список футболистов</legend>
+                          <div class="form-group">
+                            <label for="playerName" class="col-sm-4 control-label">Имя игрока</label>
+                            <div class="col-sm-8">
+                              <input type="text" ng-model="playerName" class="form-control" id="playerName" placeholder="Имя игрока">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="playerTeam" class="col-sm-4 control-label">В какой команде играет</label>
+                            <div class="col-sm-8">
+                              <input type="text" ng-model="playerTeam" class="form-control" id="playerTeam" placeholder="В какой команде играет">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="playerCountry" class="col-sm-4 control-label">Гражданство</label>
+                            <div class="col-sm-8">
+                              <input type="text" ng-model="playerCountry" class="form-control" id="playerCountry" placeholder="Гражданство">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-sm-8 col-sm-offset-4">
+                                  <button ng-click="addPlayer()" class="btn btn-default">Добавить</button>
+                              </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Игрок</th>
+                                <th>Команда</th>
+                                <th>Национальность</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="player in players.items">
+                                <!--<td ng-bind="playerName"></td> <!-- (2) -->
+                                <!--<td ng-bind="playerTeam"></td>
+                                <td ng-bind="playerCountry"></td> -->
+                                {{player}}
+                                <td>{{player.name}}</td>
+                                <td>{{player.team}}</td>
+                                <td>{{player.country}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script>
+            var app = angular.module("playersApp", []); // (3)
+            //console.log(app);
+
+            var data = {
+                items: [
+                    {
+                        "name": "Неймар",
+                        "team": "ПСЖ",
+                        "citizen": "Бразилия"
+                    },
+                    {
+                        "name": "Лионель Месси",
+                        "team": "Барселона",
+                        "citizen": "Аргентина"
+                    }
+                ]
+            }
+
+
+            app.controller("playerCtrl", function($scope){
+                /*$scope.addPlayer = function addPlayer() {
+                    console.log(1);
+                }*/
+                $scope.players = data;
+                console.log($scope.players);
+            });
+        </script>
+
+    </body>
+</html>

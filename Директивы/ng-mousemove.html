@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>ng-mousemove</title>
+</head>
+<body>
+<div ng-app="myApp" ng-controller="myCtrl">
+
+<h1 ng-mousemove="myFunc($event)">Mouse Over Me!</h1>
+
+<p>Coordinates: {{x + ', ' + y}}</p>
+
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+  $scope.myFunc = function(myE) {
+    $scope.x = myE.clientX;
+    $scope.y = myE.clientY;
+  }
+});
+</script>
+</body>
+</html>

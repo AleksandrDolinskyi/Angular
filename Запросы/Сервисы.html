@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html ng-app="playersApp">
+    <head>
+        <meta charset="utf-8">
+        <title>Сервисы</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            input.ng-invalid-required {
+                border: 1px solid red;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="container" ng-controller="playerCtrl">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" name="addPlayerForm" novalidate>
+                        <legend>Список футболистов</legend>
+                          <div class="form-group" ng-class="{'has-error': addPlayerForm.pName.$error.required && addPlayerForm.pName.$dirty}">
+                            <label for="playerName" class="col-sm-4 control-label">Имя игрока</label>
+                            <div class="col-sm-8">
+                              <input type="text" required name="pName" ng-model="playerName" class="form-control" id="playerName" placeholder="Имя игрока">
+                              <span class="error" ng-show="addPlayerForm.pName.$dirty && addPlayerForm.pName.$error.required">Введите имя игрока!</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="playerTeam" class="col-sm-4 control-label">В какой команде играет</label>
+                            <div class="col-sm-8">
+                              <input type="text" name="pTeam" ng-model="playerTeam" class="form-control" id="playerTeam" placeholder="В какой команде играет">
+                            </div>
+                          </div>
+                          <div class="form-group" ng-class="{'has-error': addPlayerForm.pCountry.$error.required && addPlayerForm.pCountry.$dirty}">
+                            <label for="playerCountry" class="col-sm-4 control-label">Гражданство</label>
+                            <div class="col-sm-8">
+                                <input type="text" required name="pCountry" ng-model="playerCountry" class="form-control" id="playerCountry" placeholder="Гражданство">
+                                <span class="error" ng-show="addPlayerForm.pCountry.$dirty && addPlayerForm.pCountry.$error.required">Игрок не может быть без гражданства!</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="playerGoals" class="col-sm-4 control-label">Сколько голов забил</label>
+                            <div class="col-sm-8">
+                              <input type="text" name="pGoals" ng-model="playerGoals" class="form-control" id="playerGoals" placeholder="Сколько голов забил">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-sm-8 col-sm-offset-4">
+                                  <button ng-disabled="addPlayerForm.pName.$invalid || addPlayerForm.pCountry.$invalid" ng-click="addPlayer(playerName, playerTeam, playerCountry, playerGoals)" class="btn btn-default">Добавить</button>
+                              </div>
+                          </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="text" name="pSelect" ng-model="selectPlayers" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-click="sortByName('name')">Игрок</th>
+                                <th>Команда</th>
+                                <th>Национальность</th>
+                                <th>Сколько голов забил</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="player in players | filter:selectPlayers">
+                                <td>{{player.name}}</td>
+                                <td>{{player.team}}</td>
+                                <td>{{player.country}}</td>
+                                <td>{{player.goals}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script>
+            var app = angular.module("playersApp", []);
+
+            var model = [];
+
+
+            app.controller("playerCtrl", function($scope, $http){
+                $scope.players = model;
+                $scope.orderByFunction = function(player){
+                    return parseInt(player.goals);
+                };
+                $scope.addPlayer = function(playerName, playerTeam, playerCountry, playerGoals) {
+                    $scope.players.push({name: playerName, team: playerTeam, country: playerCountry, goals: playerGoals});
+                };
+
+                $scope.sortByName = function(p) {
+                    $scope.nameSorting = p;
+                };
+
+                $http({
+                    method: "GET",
+                    url: "players.json"
+                }).then(function successResp(response) {
+                    $scope.players = response.data.players;
+                    console.log($scope.players);
+                }, function errorResp(response) {
+                    console.log(response);
+                });
+
+                $http.get("players.json").then(
+                    function successResp(response) {
+                        $scope.players = response.data.players;
+                        console.log($scope.players);
+                    }
+                )
+
+            });
+
+        </script>
+
+    </body>
+</html>

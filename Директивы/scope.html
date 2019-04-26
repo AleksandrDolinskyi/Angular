@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Scope</title>
+<body ng-app="myApp">
+<p>The root scope's favorite color:</p>
+<h1>{{color}}</h1>
+<div ng-controller="myCtrl">
+  <p>The scope of the controller's favorite color:</p>
+  <h1>{{color}}</h1>
+</div>
+<p>The rootScope's favorite color is still:</p>
+<h1>{{color}}</h1>
+
+<!-- 
+
+Scope - область которая является связующей частью между HTML (представление) и JavaScript (контроллер).
+Область действия - это объект с доступными свойствами и методами.
+Область доступна как для вида, так и для контроллера. 
+
+-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+var app = angular.module('myApp', []);
+app.run(function($rootScope) {
+  $rootScope.color = 'blue';
+});
+app.controller('myCtrl', function($scope) {
+  $scope.color = "red";
+});
+</script>
+</body>
+</html>
